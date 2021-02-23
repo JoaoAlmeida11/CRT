@@ -1,7 +1,9 @@
 <?php
-
-interface iNumberValidation{
+//! i'm using :: when is protected... is this correct?
+interface iNumber{
     public static function isNumber($newValue);
+}
+interface iPositiveNumber{
     public static function isPositiveNumber($newValue);
 }
 interface iColorValidation{
@@ -12,7 +14,7 @@ interface iFigureOperations{
     public function area();
 }
 
-final class Ponto implements iNumberValidation{
+final class Ponto implements iNumber{
     private $x;
     private $y;
 
@@ -52,19 +54,10 @@ final class Ponto implements iNumberValidation{
             throw new Exception("value is null");
         }
     }
-    public static function isPositiveNumber($newValue){
-        if(Ponto::isNumber($newValue)){
-             if($newValue>0){
-                return $newValue;
-            }
-            else{                
-                throw new Exception("value is not a positive number");
-             }
-        }
-    }
 }
 
-abstract class Figures2D implements iColorValidation{
+abstract class Figures2D implements iColorValidation, iPositiveNumber{
+    //TODO private const $id; how to auto increment
     private $color;
 
     private function __construct($color){
@@ -98,15 +91,95 @@ abstract class Figures2D implements iColorValidation{
             throw new Exception("color is null");
         }
     }
+    public static function isPositiveNumber($newValue){
+        if(Ponto::isNumber($newValue)){
+             if($newValue>0){
+                return $newValue;
+            }
+            else{                
+                throw new Exception("value is not a positive number");
+            }
+        }
+    }
 }
 
-class Circles extends Figures2D{
-    private $ponto1;
+final class Circles extends Figures2D{
+    private $center;
     private $radius;
+    private $perimetro;
+    private $area;
 
     private function __construct($x, $y, $radius){
-        $this->ponto1 = new Ponto($$x, $y);
-
+        if(Figures2D::isPositiveNumber($radius)){
+            $this->center = new Ponto($$x, $y);
+            $this->radius = $radius;
+        }
+        else{
+            throw new Exception("can not create circle");
+        }
+    }
+    protected function getCenter(){
+        return $this->center;
+    }
+    protected function setCenter($newValue){
+        if(Ponto::isNumber($newValue)){
+            $this->center = $newValue;
+            return "update successfully";
+        }
+        else{
+            throw new Exception("can not update center of circle");
+        }
+    }
+    protected function getRadius(){
+        return $this->radius;
+    }
+    protected function setRadius($newValue){
+        if(Figures2D::isPositiveNumber($newValue)){
+            $this->center = $newValue;
+            return "update successfully";
+        }
+        else{
+            throw new Exception("can not update center of circle");
+        }
     }
 
+}
+
+final class Rectangles{
+    private $ponto1;
+    private $ponto2;
+    private $ponto3;
+    private $ponto4;
+    private $perimetro;
+    private $area;
+
+    private function __construct($ponto1, $ponto2, $ponto3, $ponto4){
+        try{
+            $this->ponto1 = new Ponto($ponto1[0], $ponto1[1]);
+            $this->ponto2 = new Ponto($ponto2[0], $ponto2[1]);
+            $this->ponto3 = new Ponto($ponto3[0], $ponto3[1]);
+            $this->ponto4 = new Ponto($ponto4[0], $ponto4[1]);
+        } catch(Exception $error){
+            echo 'Caught exception at Rectangles: ',  $error->getMessage(), "\n";
+        }
+    }
+    protected function getPonto1(){
+        return $this->ponto1;
+    }protected function getPonto2(){
+        return $this->ponto2;
+    }protected function getPonto3(){
+        return $this->ponto3;
+    }protected function getPonto4(){
+        return $this->ponto4;
+    }
+    //TODO when they are update de perimeter and area must be as well
+    protected function setPonto1($newX, $newY){
+        if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
+            $this->ponto1 = new Ponto($newX, $newY);
+            return "update successfully";
+        }
+        else{
+            throw new Exception("can not update ponto1 of rectangle");
+        }
+    }
 }

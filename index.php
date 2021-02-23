@@ -1,6 +1,6 @@
 <?php
 //! i'm using :: when is protected... is this correct?
-
+//* valores do perimetro não devem ser guardados num variável
 echo "working";
 interface iNumber{
     public static function isNumber($newValue);
@@ -30,16 +30,16 @@ final class Ponto implements iNumber{
         }
     }
 
-    protected function getX(){
+    public function getX(){
         return $this->x;
     }
-    protected function setX($newValue){
+    public function setX($newValue){
         $this->x = $newValue;
     }
-    protected function getY(){
+    public function getY(){
         return $this->y;
     }
-    protected function setY($newValue){
+    public function setY($newValue){
         $this->y = $newValue;
     }
 
@@ -68,10 +68,10 @@ abstract class Figures2D implements iColorValidation, iPositiveNumber{
         }
     }
 
-    protected function getColor(){
+    public function getColor(){
         return $this->color;
     }
-    protected function setColor($newValue){
+    public function setColor($newValue){
         $this->color= $newValue;
     }
 
@@ -104,29 +104,28 @@ abstract class Figures2D implements iColorValidation, iPositiveNumber{
         }
     }
 }
-
-// TODO: add color atribute
 final class Circles extends Figures2D implements iFigureOperations{
     private $center;
     private $radius;
     private $perimetro;
     private $area;
 
-    private function __construct($x, $y, $radius){
+    private function __construct($x, $y, $radius, $color){
         if(Figures2D::isPositiveNumber($radius)){
             $this->center = new Ponto($$x, $y);
             $this->radius = $radius;
             $this->perimetro=Circles::perimeter($radius);
             $this->area=Circles::area($radius);
+            $this->color=$color;
         }
         else{
             throw new Exception("can not create circle");
         }
     }
-    protected function getCenter(){
+    public function getCenter(){
         return $this->center;
     }
-    protected function setCenter($newValue){
+    public function setCenter($newValue){
         if(Ponto::isNumber($newValue)){
             $this->center = $newValue;
             return "update successfully";
@@ -135,10 +134,10 @@ final class Circles extends Figures2D implements iFigureOperations{
             throw new Exception("can not update center of circle");
         }
     }
-    protected function getRadius(){
+    public function getRadius(){
         return $this->radius;
     }
-    protected function setRadius($newValue){
+    public function setRadius($newValue){
         if(Figures2D::isPositiveNumber($newValue)){
             $this->radius = $newValue;
             $this->perimetro=Circles::perimeter($newValue);
@@ -155,10 +154,10 @@ final class Circles extends Figures2D implements iFigureOperations{
     public static function area($radius){
         return pow($radius, 2)*M_PI;
     }
-    protected function getPerimeter(){
+    public function getPerimeter(){
         return $this->perimetro;
     }
-    protected function getArea(){
+    public function getArea(){
         return $this->area;
     }
 
@@ -172,12 +171,13 @@ final class Rectangles extends Figures2D implements iFigureOperations{
     private $perimetro;
     private $area;
 
-    private function __construct($ponto1, $ponto2, $ponto3, $ponto4){
+    private function __construct($ponto1, $ponto2, $ponto3, $ponto4, $color){
         try{
             $this->ponto1 = new Ponto($ponto1[0], $ponto1[1]);
             $this->ponto2 = new Ponto($ponto2[0], $ponto2[1]);
             $this->ponto3 = new Ponto($ponto3[0], $ponto3[1]);
             $this->ponto4 = new Ponto($ponto4[0], $ponto4[1]);
+            $this->color=$color;
             $data = array(
                 $this->ponto1,
                 $this->ponto2,
@@ -191,20 +191,19 @@ final class Rectangles extends Figures2D implements iFigureOperations{
             echo 'Caught exception at Rectangles: ',  $error->getMessage(), "\n";
         }
     }
-    protected function getPonto1(){
+    public function getPonto1(){
         return $this->ponto1;
     }
-    protected function getPonto2(){
+    public function getPonto2(){
         return $this->ponto2;
     }
-    protected function getPonto3(){
+    public function getPonto3(){
         return $this->ponto3;
     }
-    protected function getPonto4(){
+    public function getPonto4(){
         return $this->ponto4;
     }
-    //TODO when they are update de perimeter and area must be as well
-    protected function setPonto1($newX, $newY){
+    public function setPonto1($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto1 = new Ponto($newX, $newY);
             $data = array(
@@ -221,7 +220,7 @@ final class Rectangles extends Figures2D implements iFigureOperations{
             throw new Exception("can not update ponto1 of rectangle");
         }
     }
-    protected function setPonto2($newX, $newY){
+    public function setPonto2($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto2 = new Ponto($newX, $newY);
             $data = array(
@@ -238,7 +237,7 @@ final class Rectangles extends Figures2D implements iFigureOperations{
             throw new Exception("can not update ponto2 of rectangle");
         }
     }
-    protected function setPonto3($newX, $newY){
+    public function setPonto3($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto3 = new Ponto($newX, $newY);
             $data = array(
@@ -255,7 +254,7 @@ final class Rectangles extends Figures2D implements iFigureOperations{
             throw new Exception("can not update ponto3 of rectangle");
         }
     }
-    protected function setPonto4($newX, $newY){
+    public function setPonto4($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto4 = new Ponto($newX, $newY);
             $data = array(
@@ -299,11 +298,12 @@ final class Triangles extends Figures2D implements iFigureOperations{
     private $perimetro;
     private $area;
 
-    private function __construct($ponto1, $ponto2, $ponto3){
+    private function __construct($ponto1, $ponto2, $ponto3, $color){
         try{
             $this->ponto1 = new Ponto($ponto1[0], $ponto1[1]);
             $this->ponto2 = new Ponto($ponto2[0], $ponto2[1]);
             $this->ponto3 = new Ponto($ponto3[0], $ponto3[1]);
+            $this->color=$color;
 
             $data = array(
                 $this->ponto1,
@@ -318,16 +318,16 @@ final class Triangles extends Figures2D implements iFigureOperations{
             echo 'Caught exception at Triangles: ',  $error->getMessage(), "\n";
         }
     }
-    protected function getPonto1(){
+    public function getPonto1(){
         return $this->ponto1;
     }
-    protected function getPonto2(){
+    public function getPonto2(){
         return $this->ponto2;
     }
-    protected function getPonto3(){
+    public function getPonto3(){
         return $this->ponto3;
     }
-    protected function setPonto1($newX, $newY){
+    public function setPonto1($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto1 = new Ponto($newX, $newY);
             $data = array(
@@ -343,7 +343,7 @@ final class Triangles extends Figures2D implements iFigureOperations{
             throw new Exception("can not update ponto1 of triangle");
         }
     }
-    protected function setPonto2($newX, $newY){
+    public function setPonto2($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto2 = new Ponto($newX, $newY);
             $data = array(
@@ -359,7 +359,7 @@ final class Triangles extends Figures2D implements iFigureOperations{
             throw new Exception("can not update ponto2 of triangle");
         }
     }
-    protected function setPonto3($newX, $newY){
+    public function setPonto3($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto3 = new Ponto($newX, $newY);
             $data = array(
@@ -382,10 +382,11 @@ final class Triangles extends Figures2D implements iFigureOperations{
         $halfPerimeter = Triangles::perimeter($lados)/2;
         return sqrt($halfPerimeter*($halfPerimeter-$lados[0])*($halfPerimeter-$lados[1])*($halfPerimeter-$lados[2]));
     }
-    protected function getPerimeter(){
+    public function getPerimeter(){
         return $this->perimetro;
     }
-    protected function getArea(){
+    public function getArea(){
         return $this->area;
     }
 }
+ $c1 = new Circles(1, 4, 2, "yellow");

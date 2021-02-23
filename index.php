@@ -1,13 +1,23 @@
 <?php
+
+interface iValueValidation{
+    public function isPositiveNumber($newValue);
+}
 interface iFigureOperations{
     public function perimeter();
     public function area();
 }
 
-abstract class Figures2D{
+final class Ponto implements iValueValidation{
     private $x;
     private $y;
-    private $color;
+
+    private function __construct($x, $y){
+        if($this->isPositiveNumber($x) && $this->isPositiveNumber($y)){
+            $this->x = $x;
+            $this->y = $y;
+        }
+    }
 
     protected function getX(){
         return $this->x;
@@ -21,17 +31,11 @@ abstract class Figures2D{
     protected function setY($newValue){
         $this->y = $newValue;
     }
-    protected function getColor(){
-        return $this->color;
-    }
-    protected function setColor($newValue){
-        $this->color= $newValue;
-    }
-    private function isPositiveNumber($newValue){
+    public function isPositiveNumber($newValue){
         if(isset($newValue)){
             if(is_numeric($newValue)){
                 if($newValue>0){
-                    
+                    return $newValue;
                 }
                 else{
                     throw new Exception("value is not a positive number");
@@ -45,5 +49,21 @@ abstract class Figures2D{
             throw new Exception("value is null");
         }
     }
+}
+
+abstract class Figures2D{
+    private $color;
+    protected function getColor(){
+        return $this->color;
+    }
+    protected function setColor($newValue){
+        $this->color= $newValue;
+    }
+}
+
+class Circles extends Figures2D{
+    private $ponto1;
+    private $radius;
+
 
 }

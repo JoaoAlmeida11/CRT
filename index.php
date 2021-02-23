@@ -103,6 +103,7 @@ abstract class Figures2D implements iColorValidation, iPositiveNumber{
     }
 }
 
+// TODO: add color atribute
 final class Circles extends Figures2D{
     private $center;
     private $radius;
@@ -145,7 +146,7 @@ final class Circles extends Figures2D{
 
 }
 
-final class Rectangles{
+final class Rectangles extends Figures2D{
     private $ponto1;
     private $ponto2;
     private $ponto3;
@@ -176,10 +177,40 @@ final class Rectangles{
     protected function setPonto1($newX, $newY){
         if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
             $this->ponto1 = new Ponto($newX, $newY);
-            return "update successfully";
+            return "update ponto1 successfully";
         }
         else{
             throw new Exception("can not update ponto1 of rectangle");
         }
     }
+    protected function setPonto2($newX, $newY){
+        if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
+            $this->ponto2 = new Ponto($newX, $newY);
+            return "update ponto2 successfully";
+        }
+        else{
+            throw new Exception("can not update ponto2 of rectangle");
+        }
+    }
+    protected function setPonto3($newX, $newY){
+        if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
+            $this->ponto3 = new Ponto($newX, $newY);
+            return "update ponto3 successfully";
+        }
+        else{
+            throw new Exception("can not update ponto3 of rectangle");
+        }
+    }
+    protected function setPonto4($newX, $newY){
+        if(Ponto::isNumber($newX) && Ponto::isNumber($newY)){
+            $this->ponto4 = new Ponto($newX, $newY);
+            return "update ponto4 successfully";
+        }
+        else{
+            throw new Exception("can not update ponto4 of rectangle");
+        }
+    }
+}
+final class Triangles extends Figures2D{
+
 }

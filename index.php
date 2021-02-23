@@ -2,6 +2,7 @@
 //! i'm using :: when is protected... is this correct?
 //* valores do perimetro não devem ser guardados num variável
 echo "working";
+//! necessário calcular a distancia entre pontos 
 interface iNumber{
     public static function isNumber($newValue);
 }

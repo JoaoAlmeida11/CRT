@@ -1,0 +1,45 @@
+@startuml
+
+abstract class Ponto{
+    -Integer x
+    -Integer y
+    #int getX()
+    #int setX()
+    #int getY()
+    #int setY()
+}
+
+
+abstract class Figures2D{
+
+    -String color
+    #String getColor()
+    #String setColor()
+}
+
+interface iValueValidation{
+    +isPositiveNumber()
+}
+
+class Circles
+class Rectangles
+class Triangles
+
+interface iFigureOperations{
+    +int perimeter()
+    +int area()
+}
+
+Ponto *-- Figures2D
+
+iValueValidation <|-- Ponto
+iValueValidation <|-- Figures2D
+
+Figures2D <|-- Circles
+Figures2D <|-- Rectangles
+Figures2D <|-- Triangles
+iFigureOperations <|-- Circles
+iFigureOperations <|-- Rectangles
+iFigureOperations <|-- Triangles
+
+@enduml
